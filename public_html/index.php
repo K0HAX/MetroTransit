@@ -22,7 +22,7 @@
 <th>Provider</th>
 </tr>
 <?php
-include('config.php');
+require('config.php');
 $conn = new mysqli($host, $user, $pass, "MetroTransit");
 if ($conn->connect_error) {
 	die("Connection failed: " . $conn->connect_error);
