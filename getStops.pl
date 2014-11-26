@@ -1,9 +1,12 @@
 #!/usr/bin/perl
+use File::Basename;
+use XML::Simple;
+use LWP::Simple;
 use Data::Dumper;
-use Tie::Handle::CSV;
 use DBI;
 
-my %config = do './config.pl';
+my $dirname = dirname(__FILE__);
+my %config = do "$dirname/config.pl";
 
 $database = $config{database};
 $host = $config{host};
