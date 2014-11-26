@@ -4,7 +4,7 @@ use LWP::Simple;
 use Data::Dumper;
 use DBI;
 
-my %config = do 'config.pl';
+my %config = do './config.pl';
 
 $database = $config{database};
 $host = $config{host};

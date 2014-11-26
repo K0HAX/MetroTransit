@@ -3,7 +3,7 @@ use Data::Dumper;
 use Tie::Handle::CSV;
 use DBI;
 
-my %config = do 'config.pl';
+my %config = do './config.pl';
 
 $database = $config{database};
 $host = $config{host};
