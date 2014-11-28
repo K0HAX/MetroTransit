@@ -9,81 +9,6 @@
 	#map-canvas { height: 100%; margin: 0; padding: 0; }
 </style>
 
-<?php
-include('config.php');
-$conn = new mysqli($host, $user, $pass, "MetroTransit");
-if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-}
-$sql = "SELECT `VehicleLocations`.`Route`, `Routes`.`Description`, `VehicleLocations`.`VehicleLatitude`, `VehicleLocations`.`VehicleLongitude`, `VehicleLocations`.`BlockNumber`, `VehicleLocations`.`LocationTime`, `VehicleLocations`.`Direction`, `VehicleLocations`.`Terminal`, `Providers`.`Name` AS `Provider`
-FROM VehicleLocations
-LEFT JOIN `Routes` ON (`VehicleLocations`.`Route` = `Routes`.`Route`)
-LEFT JOIN `Providers` ON (`Routes`.ProviderID = `Providers`.ProviderID)
-ORDER BY Route;";
-
-$minLat;
-$maxLat;
-$minLon;
-$maxLon;
-$num = 0;
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-        while($row = $result->fetch_assoc()) {
-                if($num == 0) {
-                        $minLat = $row["VehicleLatitude"];
-                        $maxLat = $row["VehicleLatitude"];
-                        $minLon = $row["VehicleLongitude"];
-                        $maxLon = $row["VehicleLongitude"];
-                        $num = 1;
-                } else {
-                        if($minLat > $row["VehicleLatitude"]) {
-                                $minLat = $row["VehicleLatitude"];
-                        }
-                        if($maxLat < $row["VehicleLatitude"]) {
-                                $maxLat = $row["VehicleLatitude"];
-                        }
-                        if($minLon > $row["VehicleLongitude"]) {
-                                $minLon = $row["VehicleLongitude"];
-                        }
-                        if($maxLon < $row["VehicleLongitude"]) {
-                                $maxLon = $row["VehicleLongitude"];
-                        }
-                }
-                switch ($row["Direction"]) {
-                        case 1:
-                                $direction = 'South';
-                                break;
-                        case 2:
-                                $direction = 'East';
-                                break;
-                        case 3:
-                                $direction = 'West';
-                                break;
-                        case 4:
-                                $direction = 'North';
-                                break;
-                        default:
-                                $direction = "INVALID";
-                                break;
-                }
-                //echo("<tr>\n");
-                //echo("<td>" . $row["Route"] . "</td><td>" . $row["Description"] . "</td><td>" . $row["VehicleLatitude"] . "</td><td>" . $row["VehicleLongitude"] . "</td><td>" . $row["LocationTime"] . "</td><td>" . $direction . "</td><td>" . $row["Terminal"] . "</td><td>" . $row["Provider"] . "</td>\n");
-                //echo("</tr>\n");
-        }
-        //echo("Minimum Latitude: " . $minLat . "<br>\n");
-        //echo("Maximum Latitude: " . $maxLat . "<br>\n");
-        //echo("Minimum Longitude: " . $minLon . "<br>\n");
-        //echo("Maximum Longitude: " . $maxLon . "<br><br>\n");
-        $midLat = $minLat + $maxLat;
-        $midLat = $midLat / 2;
-        $midLon = $minLon + $maxLon;
-        $midLon = $midLon / 2;
-        //echo("Middle Latitude: " . $midLat . "<br>\n");
-        //echo("Middle Longitude: " . $midLon . "<br>\n");
-}
-?>
-
 <script type="text/javascript"
 	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDrWJCRX05c9gq6abDXZ1Qg6zGmSCUU0Q4">
 </script>
@@ -98,6 +23,7 @@ if ($result->num_rows > 0) {
 	
 	var markers = [
 	<?php
+			include('config.php');
 			$conn = new mysqli($host, $user, $pass, "MetroTransit");
 			if ($conn->connect_error) {
 			        die("Connection failed: " . $conn->connect_error);
